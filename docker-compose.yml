@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: sample_app_production
+      POSTGRES_USER: sample_app_user
+      POSTGRES_PASSWORD: jf73
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    mem_limit: 750M
+
+  redis:
+    image: redis:latest
+    restart: always
+    mem_limit: 250M
+
+  sample_app_web:
+    container_name: sample-app-web-1
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    mem_limit: 3072M
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  rails_cache:
